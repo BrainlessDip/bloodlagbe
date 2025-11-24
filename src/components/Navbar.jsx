@@ -14,53 +14,52 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { SignedIn, SignedOut, useClerk, useUser } from "@clerk/nextjs";
-import Image from "next/image";
 
 const bloodGroups = [
   {
     title: "A+",
-    href: "/blood/a-plus",
+    href: "/bloods?group=a-plus",
     description:
       "Compatible with A+ and AB+ recipients. Common and widely donated.",
   },
   {
     title: "A-",
-    href: "/blood/a-minus",
+    href: "/bloods?group=a-minus",
     description:
       "Can donate to A and AB groups. Useful for emergency blood stocks.",
   },
   {
     title: "B+",
-    href: "/blood/b-plus",
+    href: "/bloods?group=b-plus",
     description:
       "Can donate to B+ and AB+. Fairly common in South Asian populations.",
   },
   {
     title: "B-",
-    href: "/blood/b-minus",
+    href: "/bloods?group=b-minus",
     description:
       "Rare type, compatible with B and AB groups. Highly valuable for banks.",
   },
   {
     title: "O+",
-    href: "/blood/o-plus",
+    href: "/bloods?group=o-plus",
     description:
       "Most common type worldwide. Can donate to any positive blood group.",
   },
   {
     title: "O-",
-    href: "/blood/o-minus",
+    href: "/bloods?group=o-minus",
     description:
       "Universal donor for all groups. Critical in emergency medicine.",
   },
   {
     title: "AB+",
-    href: "/blood/ab-plus",
+    href: "/bloods?group=ab-plus",
     description: "Universal plasma donor. Can receive blood from all groups.",
   },
   {
     title: "AB-",
-    href: "/blood/ab-minus",
+    href: "/bloods?group=ab-minus",
     description: "Very rare group. Can donate to AB- and AB+ recipients.",
   },
 ];
@@ -177,7 +176,7 @@ export function Navbar() {
               asChild
               className={navigationMenuTriggerStyle()}
             >
-              <Link href={"/manage-blood-group"}>Manage Blood Group</Link>
+              <Link href={"/profile"}>Manage Profile</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         </SignedIn>

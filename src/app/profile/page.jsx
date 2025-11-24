@@ -13,12 +13,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "sonner";
+import { ChevronDownIcon } from "lucide-react";
 
 export default function Page() {
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const api = useAxiosSecure();
 
   useEffect(() => {
@@ -46,8 +54,12 @@ export default function Page() {
   const handleUpdate = async () => {
     setLoading(true);
     try {
+      delete form.email;
+      delete form.clerkId;
+      delete form.createdAt;
+
       const res = await api.patch("/me", form);
-      setProfile(res.data);
+
       toast.success("Profile updated successfully!");
     } catch (err) {
       toast.error("Failed to update profile.");
@@ -86,32 +98,87 @@ export default function Page() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
-                <Input value={form.email || ""} disabled />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Blood Group
-                </label>
-                <Select
-                  value={form.blood_group || ""}
-                  onValueChange={(value) => handleChange("blood_group", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select blood group" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
-                      (bg) => (
-                        <SelectItem key={bg} value={bg}>
-                          {bg}
-                        </SelectItem>
-                      )
-                    )}
-                  </SelectContent>
-                </Select>
+              <div className="flex flex-row justify-between  items-center gap-2">
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    Blood Group
+                  </label>
+                  <Select
+                    value={form.blood_group || ""}
+                    onValueChange={(value) =>
+                      handleChange("blood_group", value)
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select blood group" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
+                        (bg) => (
+                          <SelectItem key={bg} value={bg}>
+                            {bg}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-center">
+                    Total Donation
+                  </label>
+                  <Input
+                    min={0}
+                    type="number"
+                    className="w-35"
+                    value={form.total_donation || ""}
+                    onChange={(e) =>
+                      handleChange("total_donation", e.target.value)
+                    }
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-center">
+                    Last Donation
+                  </label>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        id="date"
+                        className="w-48 justify-between font-normal"
+                      >
+                        {form.last_donation
+                          ? new Date(form.last_donation).toLocaleDateString()
+                          : "Select date"}
+                        <ChevronDownIcon />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto overflow-hidden p-0"
+                      align="start"
+                    >
+                      <Calendar
+                        mode="single"
+                        selected={
+                          form.last_donation
+                            ? new Date(form.last_donation)
+                            : undefined
+                        }
+                        defaultMonth={
+                          form.last_donation
+                            ? new Date(form.last_donation)
+                            : undefined
+                        }
+                        captionLayout="dropdown"
+                        onSelect={(date) => {
+                          handleChange("last_donation", date);
+                          setOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
 
               <div>
@@ -139,6 +206,7 @@ export default function Page() {
                 </label>
                 <Input
                   value={form.location || ""}
+                  type="text"
                   onChange={(e) => handleChange("location", e.target.value)}
                 />
               </div>
