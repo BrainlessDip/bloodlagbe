@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -14,6 +13,8 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { SignedIn, SignedOut, useClerk, useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 const bloodGroups = [
   {
@@ -66,7 +67,8 @@ const bloodGroups = [
 
 export function Navbar() {
   const isMobile = useIsMobile();
-
+  const { signOut } = useClerk();
+  const { user } = useUser();
   return (
     <NavigationMenu
       viewport={isMobile}
@@ -100,16 +102,86 @@ export function Navbar() {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/login">Login</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/register">Register</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+        <SignedOut>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
+              <Link href={"/login"}>Login</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
+              <Link href={"/register"}>Register</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </SignedOut>
+
+        <SignedIn>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Profile</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                    <li className="row-span-3">
+                      <NavigationMenuLink asChild>
+                        <Link
+                          className="from-muted/50 to-muted flex h-full w-full flex-col items-center rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
+                          href="/"
+                        >
+                          {user?.hasImage ? (
+                            <img
+                              src={user.imageUrl}
+                              alt={user.fullName || "User image"}
+                              width={48}
+                              height={48}
+                              className="rounded-full object-cover"
+                            />
+                          ) : null}
+                          <div className="mb-2 text-lg font-medium sm:mt-4">
+                            {user?.fullName}
+                          </div>
+                          <p className="text-muted-foreground text-sm leading-tight">
+                            {user?.emailAddresses[0]?.emailAddress}
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <ListItem
+                        href="#"
+                        title="Logout"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          signOut();
+                        }}
+                      ></ListItem>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
+              <Link href={"/manage-blood-group"}>Manage Blood Group</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </SignedIn>
+
         <NavigationMenuItem>
           <NavigationMenuTrigger>Find Blood Group</NavigationMenuTrigger>
           <NavigationMenuContent>
