@@ -21,27 +21,23 @@ import {
 } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { ChevronDownIcon } from "lucide-react";
+import Loading from "@/components/ui/loading";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Page() {
-  const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
   const api = useAxiosSecure();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await api.get("/me");
-        setProfile(res.data);
-        setForm(res.data);
-      } catch (err) {
-        console.error("Error fetching profile:", err);
-      }
-    };
-
-    fetchProfile();
-  }, [api]);
+  const { data: profile, isLoading } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const res = await api.get("/me");
+      setForm(res.data);
+      return res.data;
+    },
+  });
 
   const handleChange = (key, value) => {
     setForm({ ...form, [key]: value });
@@ -69,13 +65,13 @@ export default function Page() {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-10">
+    <div className="max-w-lg mx-auto p-3">
       <Card>
         <CardHeader>
           <CardTitle className="text-center text-xl">Manage Profile</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {profile ? (
+          {!isLoading ? (
             <>
               <div className="grid grid-cols-2 gap-2">
                 <div>
@@ -97,32 +93,29 @@ export default function Page() {
                   />
                 </div>
               </div>
-
-              <div className="flex flex-row justify-between  items-center gap-2">
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Blood Group
-                  </label>
-                  <Select
-                    value={form.blood_group || ""}
-                    onValueChange={(value) =>
-                      handleChange("blood_group", value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select blood group" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
-                        (bg) => (
-                          <SelectItem key={bg} value={bg}>
-                            {bg}
-                          </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Blood Group
+                </label>
+                <Select
+                  value={form.blood_group || ""}
+                  onValueChange={(value) => handleChange("blood_group", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select blood group" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(
+                      (bg) => (
+                        <SelectItem key={bg} value={bg}>
+                          {bg}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex flex-row justify-between items-center gap-2">
                 <div>
                   <label className="block text-sm font-medium mb-1 text-center">
                     Total Donation
@@ -256,7 +249,7 @@ export default function Page() {
               </Button>
             </>
           ) : (
-            <p className="text-center font-bold text-3xl">Loading profile...</p>
+            <Loading />
           )}
         </CardContent>
       </Card>
