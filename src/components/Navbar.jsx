@@ -19,6 +19,7 @@ export function Navbar() {
   const isMobile = useIsMobile();
   const { signOut } = useClerk();
   const { user } = useUser();
+  console.log(user);
 
   return (
     <NavigationMenu

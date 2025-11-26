@@ -1,4 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blood Lagbe
+
+Blood Lagbe is a web application designed to connect blood donors with people in need of blood. Users can register, log in, manage their profile, post requests, and search for donors by blood group.
+
+Live: https://bloodlagbe-drab.vercel.app
+Backend: https://github.com/BrainlessDip/bloodlagbeServer
+
+---
+
+## Features
+
+- User authentication (login & registration)
+- Blood donor search by blood group
+- User profiles with detailed information
+- Post creation and management
+
+---
+
+## Route Summary
+
+| Route               | Method | Description                   |
+| ------------------- | ------ | ----------------------------- |
+| `/login`            | GET    | Login page and authentication |
+| `/register`         | GET    | User registration             |
+| `/bloods`           | GET    | List and search blood donors  |
+| `/posts`            | GET    | View and create posts         |
+| `/profile/[userId]` | GET    | View user profile by ID       |
 
 ## Getting Started
 
@@ -19,6 +45,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Configure environment variables:
+
+Create a `.env` file in the root directory and add required variables, for example:
+
+```env
+DATABASE_URL=<your-database-url>
+NEXT_PUBLIC_API_URL=<your-api-url>
+```
 
 ## Learn More
 
