@@ -2,7 +2,7 @@ import React from "react";
 
 export default function UserExperiences() {
   return (
-    <section className="w-full py-24 bg-red-50">
+    <section className="w-full py-24 bg-white">
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="text-3xl font-bold text-red-700 text-center">
           User Experiences

@@ -15,7 +15,7 @@ export default function RecentPosts() {
     },
   });
   return (
-    <section className="w-full py-24 bg-white">
+    <section className="w-full py-24 bg-red-50">
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="text-3xl font-bold text-red-700 text-center">
           Recent Posts From Users
