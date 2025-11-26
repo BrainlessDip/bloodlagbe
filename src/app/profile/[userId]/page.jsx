@@ -99,6 +99,52 @@ export default function Profile({ params }) {
                 <span>{profile?.email || "No email available"}</span>
               </div>
 
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold text-gray-900">
+                  Social Media
+                </span>
+                <div className="flex flex-col text-gray-700">
+                  {profile?.social_links?.facebook && (
+                    <a
+                      href={profile.social_links.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
+                      Facebook
+                    </a>
+                  )}
+                  {profile?.social_links?.telegram && (
+                    <a
+                      href={`https://telegram.me/${profile.social_links.telegram.replace(
+                        "@",
+                        ""
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
+                      Telegram
+                    </a>
+                  )}
+                  {profile?.social_links?.whatsapp && (
+                    <a
+                      href={`https://wa.me/${profile.social_links.whatsapp}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
+                      WhatsApp
+                    </a>
+                  )}
+                  {!profile?.social_links?.facebook &&
+                    !profile?.social_links?.telegram &&
+                    !profile?.social_links?.whatsapp && (
+                      <span>No links provided</span>
+                    )}
+                </div>
+              </div>
+
               <div className="flex flex-col">
                 <span className="font-semibold">Blood Group:</span>
                 <span>{profile?.blood_group || "N/A"}</span>

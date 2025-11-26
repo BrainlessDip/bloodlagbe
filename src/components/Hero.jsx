@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Hero() {
   return (
     <>
@@ -11,9 +13,12 @@ export default function Hero() {
             save lives.
           </p>
           <div className="mt-8 flex justify-center gap-4">
-            <button className="px-6 py-3 bg-red-600 text-white rounded-xl text-lg font-semibold shadow hover:bg-red-700 transition">
+            <Link
+              href="/bloods"
+              className="px-6 py-3 bg-red-600 text-white rounded-xl text-lg font-semibold shadow hover:bg-red-700 transition"
+            >
               Find Blood
-            </button>
+            </Link>
           </div>
         </div>
 

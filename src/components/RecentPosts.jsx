@@ -1,6 +1,19 @@
-import { CardDemo, PostCard } from "./ui/post-card";
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { PostCard } from "./ui/post-card";
+import useAxios from "@/hooks/useAxios";
+import Loading from "./ui/loading";
 
 export default function RecentPosts() {
+  const api = useAxios();
+  const { data: posts = {}, isLoading } = useQuery({
+    queryKey: ["home-page-posts"],
+    queryFn: async () => {
+      const res = await api.get(`/posts`);
+      return res.data;
+    },
+  });
   return (
     <section className="w-full py-24 bg-white">
       <div className="mx-auto max-w-6xl px-6">
@@ -12,12 +25,17 @@ export default function RecentPosts() {
           needs blood.
         </p>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-          <PostCard></PostCard>
-          <PostCard></PostCard>
-          <PostCard></PostCard>
-          <PostCard></PostCard>
-        </div>
+        {isLoading ? (
+          <div className="mt-10">
+            <Loading />
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            {posts.map((post) => (
+              <PostCard key={post._id} post={post} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

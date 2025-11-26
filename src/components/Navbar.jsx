@@ -15,59 +15,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { SignedIn, SignedOut, useClerk, useUser } from "@clerk/nextjs";
 
-const bloodGroups = [
-  {
-    title: "A+",
-    href: "/bloods?group=a-plus",
-    description:
-      "Compatible with A+ and AB+ recipients. Common and widely donated.",
-  },
-  {
-    title: "A-",
-    href: "/bloods?group=a-minus",
-    description:
-      "Can donate to A and AB groups. Useful for emergency blood stocks.",
-  },
-  {
-    title: "B+",
-    href: "/bloods?group=b-plus",
-    description:
-      "Can donate to B+ and AB+. Fairly common in South Asian populations.",
-  },
-  {
-    title: "B-",
-    href: "/bloods?group=b-minus",
-    description:
-      "Rare type, compatible with B and AB groups. Highly valuable for banks.",
-  },
-  {
-    title: "O+",
-    href: "/bloods?group=o-plus",
-    description:
-      "Most common type worldwide. Can donate to any positive blood group.",
-  },
-  {
-    title: "O-",
-    href: "/bloods?group=o-minus",
-    description:
-      "Universal donor for all groups. Critical in emergency medicine.",
-  },
-  {
-    title: "AB+",
-    href: "/bloods?group=ab-plus",
-    description: "Universal plasma donor. Can receive blood from all groups.",
-  },
-  {
-    title: "AB-",
-    href: "/bloods?group=ab-minus",
-    description: "Very rare group. Can donate to AB- and AB+ recipients.",
-  },
-];
-
 export function Navbar() {
   const isMobile = useIsMobile();
   const { signOut } = useClerk();
   const { user } = useUser();
+
   return (
     <NavigationMenu
       viewport={isMobile}
@@ -135,7 +87,7 @@ export function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           className="from-muted/50 to-muted flex h-full w-full flex-col items-center rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
-                          href="/"
+                          href={`/profile/${user?.id}`}
                         >
                           {user?.hasImage ? (
                             <img
@@ -185,20 +137,9 @@ export function Navbar() {
         </SignedIn>
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Find Blood Group</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-2 sm:w-[400px] md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              {bloodGroups.map((group) => (
-                <ListItem
-                  key={group.title}
-                  title={group.title}
-                  href={group.href}
-                >
-                  {group.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href={"/bloods"}>Find Blood Group</Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
