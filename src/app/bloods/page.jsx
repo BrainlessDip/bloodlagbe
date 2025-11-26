@@ -4,12 +4,14 @@ import Loading from "@/components/ui/loading";
 import UserCard from "@/components/ui/user-card";
 import useAxios from "@/hooks/useAxios";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 
 export default function Page() {
   const api = useAxios();
+  const pathname = usePathname();
 
   const { data: users = [], isLoading } = useQuery({
-    queryKey: ["blood-groups"],
+    queryKey: ["blood-groups", pathname],
     queryFn: async () => {
       const res = await api.get("/blood-groups");
       return res.data;

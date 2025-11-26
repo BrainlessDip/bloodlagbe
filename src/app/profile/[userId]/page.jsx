@@ -30,7 +30,7 @@ export default function Profile({ params }) {
   });
 
   return (
-    <div className="w-full flex justify-center p-4">
+    <div className="w-full flex justify-center p-4 flex-col items-center gap-5 ">
       <Card className="w-full max-w-md rounded-2xl shadow-md">
         {!isLoading ? (
           <>
@@ -135,6 +135,28 @@ export default function Profile({ params }) {
           </>
         ) : (
           <Loading />
+        )}
+      </Card>
+      <Card className="w-full max-w-md rounded-2xl shadow-md p-4 flex flex-col gap-3">
+        <h3 className="text-lg font-semibold">Recent Posts</h3>
+        <Separator />
+        {isLoading ? (
+          <Loading />
+        ) : profile.posts.length ? (
+          profile?.posts.map((post) => (
+            <Card key={post.id} className="p-3 rounded-lg border">
+              <p>{post.content}</p>
+              <span className="text-xs text-gray-500">
+                {new Date(post.createdAt).toLocaleString()} (
+                {formatDistanceToNow(new Date(post.createdAt), {
+                  addSuffix: true,
+                })}
+                )
+              </span>
+            </Card>
+          ))
+        ) : (
+          <p className="text-gray-500">No posts yet.</p>
         )}
       </Card>
     </div>

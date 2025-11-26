@@ -156,6 +156,9 @@ export function Navbar() {
                       </NavigationMenuLink>
                     </li>
                     <li>
+                      <ListItem href="/posts" title="Recent Posts"></ListItem>
+                    </li>
+                    <li>
                       <ListItem
                         href="#"
                         title="Logout"
